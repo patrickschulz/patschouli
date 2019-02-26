@@ -1,0 +1,48 @@
+\usetikzlibrary{
+    arrows,
+    arrows.meta,
+    positioning,
+    calc,
+    patterns
+}
+\tikzset {
+    line/.style={semithick},
+    tip/.style args = {#1 and #2}{
+        line,
+        ->,
+        >=stealth,
+        shorten >= #1,
+        shorten <= #2
+    },
+    tip/.default = {0pt and 0pt},
+    bitip/.style args = {#1 and #2}{
+        line,
+        <->,
+        >=stealth,
+        shorten >= #1,
+        shorten <= #2
+    },
+    bitip/.default = {0pt and 0pt},
+    rtip/.style = {
+        line,
+        <-,
+        >=stealth
+    },
+    vtip/.style = {
+        line,
+        <-,
+        >=stealth,
+        shorten >=2pt, 
+        shorten <=2pt
+    },
+    dot diameter/.store in = \dotdiameter,
+    dot diameter = 1.25pt,
+    dot spacing/.store in = \dotspacing,
+    dot spacing = 1.3pt,
+    dots/.style = {
+        line width = \dotdiameter,
+        line cap = round,
+        dash pattern = on 0pt off \dotspacing
+    }
+}
+\def\showboundingbox{\path[draw=black] (current bounding box.north west) rectangle (current bounding box.south east);}

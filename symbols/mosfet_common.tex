@@ -1,0 +1,27 @@
+\newif\ifmosfetdrawbulk
+\newif\ifmosfetdrawbulkarrow
+\newif\ifmosfetmirror
+\newif\ifmosfetnoarrow
+\newif\ifmosfetfilldot
+
+\tikzset{
+    circuits/mosfet/scale/.initial=1, % not implemented
+    circuits/mosfet/gate width/.initial={0.6cm},
+    circuits/mosfet/gate skip/.initial={0.1cm},
+    circuits/mosfet/drain length/.initial={0.2cm},
+    circuits/mosfet/source length/.initial={0.2cm},
+    circuits/mosfet/channel height/.initial={0.32cm},
+    circuits/mosfet/channel length/.initial={0.6cm},
+    circuits/mosfet/arrow length/.initial={1.75mm},
+    circuits/mosfet/arrow width/.initial={1.75mm},
+    circuits/mosfet/gate line width/.initial={1.2pt},
+    circuits/mosfet/bulk line width/.initial={0.8pt},
+    circuits/mosfet/gate dot radius/.initial=1.5pt,
+    circuits/mosfet/gate dot line width/.initial=0.8pt,
+    % mosfet options
+    circuits/mosfet/no source arrow/.is if=mosfetnoarrow,
+    circuits/mosfet/fill gate dot/.is if=mosfetfilldot,
+    circuits/mosfet/draw bulk/.is if=mosfetdrawbulk,
+    circuits/mosfet/draw bulk arrow/.is if=mosfetdrawbulkarrow,
+    circuits/mosfet/mirror/.is if=mosfetmirror,
+}

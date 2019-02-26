@@ -1,0 +1,114 @@
+\newif\ifcircuitsflip
+
+% drawing styles
+\tikzset{
+    wirethickness/.style = {thick},
+    wire/.style={wirethickness},
+    arrowwire/.style = {
+        wirethickness,
+        ->,
+        >=stealth,
+    },
+    lwire/.style={wirethickness, line cap = rect},
+    scriptsize/.style={font=\scriptsize},
+    ---/.style args={#1 and #2}{to path={-- ++(#1, 0) |- ($(\tikztotarget)+(#2, 0)$)}},
+    ---/.default = 0cm and 0cm,
+    -|-/.style args={#1 and #2}{to path={-| ([xshift=#1, yshift=#2]$(\tikztostart)!0.5!(\tikztotarget)$) |- (\tikztotarget) \tikztonodes}},
+    -|-/.default = 0cm and 0cm,
+    |-|/.style args={#1 and #2}{to path={|- ([xshift=#1, yshift=#2]$(\tikztostart)!0.5!(\tikztotarget)$) -| (\tikztotarget) \tikztonodes}},
+    |-|/.default = 0cm and 0cm,
+    angleconnect/.style={to path={-- ++(#1, 0) -- ($(\tikztotarget)-(#1, 0)$) -- (\tikztotarget)}},
+    angleconnect/.value required = true,
+    tmodule/.style args ={#1 and #2}{draw, rectangle, wire, minimum width = #1, minimum height = #2},
+    tmodule/.default = {0cm and 0cm},
+    module/.style args ={#1 and #2}{
+        wire,
+        draw, rectangle,
+        align = center,
+        minimum width = #1,
+        minimum height = #2
+    },
+    module/.default = 1cm and 1cm,
+    sumpoint/.style = {
+        wire,
+        draw, circle,
+        minimum size = 0.5cm,
+        inner sep = 0cm
+    },
+    current arrow/.style = {
+        postaction = decorate,
+        decoration = {
+            markings,
+            mark = at position #1 with {\arrow{stealth}}
+        }
+    },
+    current arrow/.default = 0.5,
+    current arrow reversed/.style = {
+        postaction = decorate,
+        decoration = {
+            markings,
+            mark = at position #1 with {\arrowreversed{stealth}}
+        }
+    },
+    current arrow reversed/.default = 0.5,
+    % flip components (effect depends on shape)
+    flip/.is if = circuitsflip
+}
+
+\pgfkeys{
+    % general circuits options
+    /tikz/circuits/line width/.initial = 0.8pt,
+    /tikz/circuits/dot/radius/.initial = 0.05cm,
+    /tikz/dot/.style = {dotshape},
+    /tikz/circuits/port/radius/.initial = 0.05cm,
+    %/tikz/port/.style = {portshape}
+    /tikz/port/.style = {wire, draw=black, fill=white, circle, inner sep = 0cm, minimum size = 0.1cm}
+}
+
+\makeatletter
+\pgfdeclareshape{dotshape}
+{
+    \saveddimen{\radius}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/dot/radius}}
+    \anchor{center}{\pgfpointorigin}
+    \anchor{north}{\pgfpointorigin}
+    \anchor{south}{\pgfpointorigin}
+    \anchor{west}{\pgfpointorigin}
+    \anchor{east}{\pgfpointorigin}
+    \backgroundpath{
+        \pgfpathcircle{\pgfpointorigin}{\radius}
+        \pgfusepath{fill}
+    }
+}
+\pgfdeclareshape{portshape}
+{
+    \saveddimen{\radius}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/port/radius}}
+    \anchor{center}{\pgfpointorigin}
+    \backgroundpath{
+        \color{white}
+        \pgfsetstrokecolor{black}
+        \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/line width}}
+        \pgfpathcircle{\pgfpointorigin}{\radius}
+        \pgfusepath{fill, stroke}
+    }
+}
+\makeatother
+
+\input{symbols/ota}
+\input{symbols/opamp}
+\input{symbols/capacitor}
+\input{symbols/resistor}
+\input{symbols/inductor}
+\input{symbols/nmos}
+\input{symbols/pmos}
+\input{symbols/current_source}
+\input{symbols/ground}
+\input{symbols/vdd}
+\input{symbols/impedance}
+\input{symbols/amplifier}
+\input{symbols/mixer}
+\input{symbols/oscillator}
+\input{symbols/antenna}
+\input{symbols/gyrator}
+\input{symbols/inverter}
+
+% vim: ft=plaintex nowrap

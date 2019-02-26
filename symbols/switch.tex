@@ -1,0 +1,60 @@
+\newif\ifswitchopen
+
+\tikzset{
+    % switch
+    circuits/switch/open/.is if=switchopen,
+    circuits/switch/width/.initial=0.4cm,
+    circuits/switch/circle radius/.initial=0.05cm,
+    circuits/switch/open angle/.initial=60
+}
+
+\makeatletter
+\pgfdeclareshape{eswitch}
+{
+    \savedanchor{\center}{
+        \pgfpointorigin
+    }
+    \savedanchor{\plus}{
+        \pgfpointadd{\pgfpointorigin}{\pgfpoint{-\pgfkeysvalueof{/tikz/switch width}/2}{0cm}}
+    }
+    \savedanchor{\minus}{
+        \pgfpointadd{\pgfpointorigin}{\pgfpoint{\pgfkeysvalueof{/tikz/switch width}/2}{0cm}}
+    }
+
+    \anchor{center}{\center}
+    \anchor{plus}{\plus}
+    \anchor{minus}{\minus}
+    \anchor{left}{\plus}
+    \anchor{right}{\minus}
+    \anchor{east}{\pgfpointadd{\minus}{\pgfpoint{\pgfkeysvalueof{/tikz/switch line width}/2}{0cm}}}
+    \anchor{west}{\plus}
+    \anchor{north}{\pgfpointpolar{45}{\pgfkeysvalueof{/tikz/switch width}/2}}
+    \anchor{south}{\pgfpointpolar{-45}{\pgfkeysvalueof{/tikz/switch width}/2}}
+    \anchor{north east}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{\pgfkeysvalueof{/tikz/switch width}/2}{\pgfkeysvalueof{/tikz/switch width}/2}}}
+    \anchor{north west}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{\pgfkeysvalueof{/tikz/switch width}/2}{-\pgfkeysvalueof{/tikz/switch width}/2}}}
+    \anchor{south east}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\pgfkeysvalueof{/tikz/switch width}/2}{\pgfkeysvalueof{/tikz/switch width}/2}}}
+    \anchor{south west}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\pgfkeysvalueof{/tikz/switch width}/2}{-\pgfkeysvalueof{/tikz/switch width}/2}}}
+    \beforebackgroundpath{
+        \pgfsetlinewidth{\pgfkeysvalueof{/tikz/switch line width}}
+        % draw wire
+        \pgfpathmoveto{\pgfpointadd{\plus}{\pgfpoint{\pgfkeysvalueof{/tikz/switch circle radius}}{0cm}}}
+        \ifswitchopen
+            \pgfpathlineto{\pgfpointpolar{\pgfkeysvalueof{/tikz/switch open angle}}{\pgfkeysvalueof{/tikz/switch width}/2}}
+        \else
+            \pgfpathlineto{\pgfpointpolar{0}{\pgfkeysvalueof{/tikz/switch width}/2}}
+        \fi
+        \pgfusepath{stroke}
+        \pgfpathcircle{
+            \pgfpointadd{\plus}{\pgfpoint{\pgfkeysvalueof{/tikz/switch circle radius}/2}{0cm}}
+        }{\pgfkeysvalueof{/tikz/switch circle radius}}
+        \pgfusepath{fill}
+        \pgfpathcircle{
+            \pgfpointadd{\minus}{\pgfpoint{-\pgfkeysvalueof{/tikz/switch circle radius}/2}{0cm}}
+        }{\pgfkeysvalueof{/tikz/switch circle radius}}
+        \pgfsetfillcolor{white}
+        \pgfusepath{fill,stroke}
+    }
+}
+\makeatother
+
+% vim: ft=plaintex

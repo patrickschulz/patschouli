@@ -1,0 +1,89 @@
+\tikzset{
+    circuits/amplifier/width/.initial = 1.25cm,
+    circuits/amplifier/height/.initial = 1.25cm,
+    amplifier/.style = {amplifiershape}
+}
+
+\makeatletter
+\pgfdeclareshape{amplifiershape}
+{
+    \saveddimen{\width}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/amplifier/width}}
+    \saveddimen{\inputheight}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/amplifier/height}}
+    \savedanchor{\centerpoint}{\pgfpointorigin}
+    \savedanchor{\inputplus}{%
+        \pgfpointadd%
+        {\pgfpointorigin}%
+        {\pgfpoint%
+            {-0.5 * \pgfkeysvalueof{/tikz/circuits/amplifier/width}}%
+            {0.5 * \pgfkeysvalueof{/tikz/circuits/amplifier/height}}
+        }%
+    }
+    \savedanchor{\inputminus}{%
+        \pgfpointadd%
+        {\pgfpointorigin}%
+        {\pgfpoint%
+            {-0.5 * \pgfkeysvalueof{/tikz/circuits/amplifier/width}}%
+            {-0.5 * \pgfkeysvalueof{/tikz/circuits/amplifier/height}}
+        }%
+    }
+    \savedanchor{\output}{%
+        \pgfpointadd%
+        {\pgfpointorigin}%
+        {\pgfpoint%
+            {0.5 * \pgfkeysvalueof{/tikz/circuits/amplifier/width}}%
+            {0cm}
+        }%
+    }
+    % electrical terminals (anchors)
+    \anchor{in}{\pgfpointadd{\centerpoint}{\pgfpoint{-\width/2}{0cm}}}
+    \anchor{out}{\output}
+    \anchor{+power}{
+        \pgfpointlineattime%
+        {0.5}%
+        {\pgfpointadd{\inputplus}{\pgfpoint{0cm}{0.5 * \inputheight}}}
+        {\output}%
+    }
+    \anchor{-power}{
+        \pgfpointlineattime%
+        {0.5}%
+        {\pgfpointadd{\inputminus}{\pgfpoint{0cm}{-0.5 * \inputheight}}}
+        {\output}%
+    }
+    % regular anchors
+    \anchor{center}{\centerpoint}
+    \anchor{north}{
+        \pgfpointadd{\inputplus}{\pgfpoint{\width/2}{0.5 * \inputheight}}
+    }
+    \anchor{south}{
+        \pgfpointadd{\inputminus}{\pgfpoint{\width/2}{-0.5 * \inputheight}}
+    }
+    \anchor{east}{
+        \pgfpointadd{\pgfpointorigin}{\pgfpoint{\width/2}{0cm}}
+    }
+    \anchor{west}{
+        \pgfpointadd{\pgfpointorigin}{\pgfpoint{-\width/2}{0cm}}
+    }
+    \anchor{north west}{
+        \pgfpointadd{\inputplus}{\pgfpoint{0cm}{0.5 * \inputheight}}
+    }
+    \anchor{south west}{
+        \pgfpointadd{\inputminus}{\pgfpoint{0cm}{-0.5 * \inputheight}}
+    }
+    \anchor{north east}{
+        \pgfpointadd{\inputplus}{\pgfpoint{\width}{0.5 * \inputheight}}
+    }
+    \anchor{south east}{
+        \pgfpointadd{\inputminus}{\pgfpoint{\width}{-0.5 * \inputheight}}
+    }
+    \backgroundpath{
+        \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/line width}}
+        \pgfpathmoveto{\inputplus}
+        \pgfpathlineto{\output}
+        \pgfpathlineto{\inputminus}
+        \pgfpathclose
+        \pgfusepath{stroke}
+    }
+}
+\makeatother
+
+% vim: ft=plaintex nowrap

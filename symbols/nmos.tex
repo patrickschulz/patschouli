@@ -1,0 +1,94 @@
+\input{symbols/mosfet_common}
+
+\makeatletter
+\pgfdeclareshape{nmos}
+{
+    \saveddimen{\gatewidth}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/gate width}}
+    \saveddimen{\gateskip}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/gate skip}}
+    \saveddimen{\drainlength}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/drain length}}
+    \saveddimen{\sourcelength}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/source length}}
+    \saveddimen{\channellength}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/channel length}}
+    \saveddimen{\channelheight}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/channel height}}
+    \saveddimen{\arrowlength}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow length}}
+    \saveddimen{\arrowwidth}{\pgf@x=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow width}}
+
+    % electrical terminals
+    \anchor{drain}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{0.5 * \channellength + \drainlength}}}
+    \anchor{source}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength - \sourcelength}}}
+    \anchor{gate}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight -\gateskip}{0cm}}}
+    \anchor{bulk}{\pgfpointorigin}
+    % general anchors
+    \anchor{center}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{(-\channelheight - \gateskip)/2}{0cm}}}
+    \anchor{north}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{(-\channelheight - \gateskip)/2}{0.5 * \channellength + \drainlength}}}
+    \anchor{south}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{(-\channelheight - \gateskip)/2}{-0.5 * \channellength - \drainlength}}}
+    \anchor{west}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight -\gateskip}{0cm}}}
+    \anchor{east}{\pgfpointorigin}
+    \anchor{north west}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight - \gateskip}{0.5 * \channellength + \drainlength}}}
+    \anchor{north east}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{0.5 * \channellength + \drainlength}}}
+    \anchor{south west}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight - \gateskip}{-0.5 * \channellength - \drainlength}}}
+    \anchor{south east}{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength - \drainlength}}}
+    \beforebackgroundpath{
+        \pgfsetbuttcap
+        \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/line width}}
+        %% draw channel, source and drain extensions
+        % move to drain
+        \pgfpathmoveto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{0.5 * \channellength + \drainlength}}}
+        % draw drain extension
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{0.5 * \channellength}}}
+        % draw to channel
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{0.5 * \channellength}}}
+        % draw half of channel
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{0cm}}}
+        % draw other half of channel (starting from source
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{-0.5 * \channellength}}}
+        % move to 'inner' source (without extension)
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength}}}
+        % draw source extension
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength - \sourcelength}}}
+        \pgfusepath{stroke}
+        %% draw gate
+        \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/mosfet/gate line width}}
+        \pgfpathmoveto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight - \gateskip}{0.5 * \channellength + 0.5 * \pgfkeysvalueof{/tikz/circuits/line width}}}}
+        \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight - \gateskip}{-0.5 * \channellength - 0.5 * \pgfkeysvalueof{/tikz/circuits/line width}}}}
+        \pgfusepath{stroke}
+        % draw bulk, source arrow and gate circle, depending on the display options
+        \ifmosfetdrawbulk
+            \ifmosfetnoarrow
+                % draw bulk (with arrow)
+                \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/mosfet/bulk line width}}
+                \pgfpathmoveto{\pgfpointorigin}
+                \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{0cm}}}
+                \pgfsetarrows{-{Stealth[length=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow length}, width=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow width}]}}
+                \pgfusepath{stroke}
+            \else
+                % draw bulk (without arrow)
+                \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuits/mosfet/bulk line width}}
+                \pgfpathmoveto{\pgfpointorigin}
+                \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{0cm}}}
+                \pgfusepath{stroke}
+                % draw source arrow
+                \pgfsetlinewidth{0.8*\pgfkeysvalueof{/tikz/circuits/line width}}
+                \pgfpathmoveto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{-0.5 * \channellength}}}
+                \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength}}}
+                \pgfsetarrows{-{Stealth[length=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow length}, width=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow width}]}}
+                \pgfusepath{stroke}
+                \pgfsetarrowsend{}
+            \fi
+        \else
+            \ifmosfetnoarrow
+                % no circle in nmos
+            \else
+                % draw source arrow
+                \pgfsetlinewidth{0.8*\pgfkeysvalueof{/tikz/circuits/line width}}
+                \pgfpathmoveto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{-\channelheight}{-0.5 * \channellength}}}
+                \pgfpathlineto{\pgfpointadd{\pgfpointorigin}{\pgfpoint{0cm}{-0.5 * \channellength}}}
+                \pgfsetarrows{-{Stealth[length=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow length}, width=\pgfkeysvalueof{/tikz/circuits/mosfet/arrow width}]}}
+                \pgfusepath{stroke}
+                \pgfsetarrowsend{}
+            \fi
+        \fi
+    }
+}
+\makeatother
+
+% vim: ft=plaintex nowrap
