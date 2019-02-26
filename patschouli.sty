@@ -5,6 +5,8 @@
 \RequirePackage{unicode-math}
 \RequirePackage{microtype}
 
+% adapt this definition to your system
+\def\patschouli@install@path{/home/patrick}
 \DeclareOption{libertine}{
     \setmainfont{LibertinusSerif}[
         UprightFont    = *-Regular,
@@ -12,24 +14,24 @@
         ItalicFont     = *-Italic,
         BoldItalicFont = *-Italic,
         Extension      = .otf,
-        Path           = /home/patrick/texmf/tex/latex/patschouli/fonts/
+        Path           = \patschouli@install@path/texmf/tex/latex/patschouli/fonts/
     ]
     \setsansfont{LibertinusSans}[
         UprightFont    = *-Regular,
         BoldFont       = *-Bold,
         ItalicFont     = *-Italic,
         Extension      = .otf,
-        Path           = /home/patrick/texmf/tex/latex/patschouli/fonts/
+        Path           = \patschouli@install@path/texmf/tex/latex/patschouli/fonts/
     ]
     \setmathfont{LibertinusMath-Regular}[
-        Extension = .otf,
-        Path=/home/patrick/texmf/tex/latex/patschouli/fonts/
+        Extension      = .otf,
+        Path           = \patschouli@install@path/texmf/tex/latex/patschouli/fonts/
     ]
 }
 \DeclareOption{computermodern}{
     \relax % nothing to do, since this is the default
 }
-\ExecuteOptions{computermodern}
+\ExecuteOptions{libertine}
 
 \ProcessOptions\relax
 
